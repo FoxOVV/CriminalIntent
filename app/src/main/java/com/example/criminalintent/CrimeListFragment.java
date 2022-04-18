@@ -1,6 +1,7 @@
 package com.example.criminalintent;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,11 @@ import java.util.List;
 public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
+    private final String TAG = this.getClass().getSimpleName();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.i(TAG,"TAGonCreateView");
         View view = inflater.inflate(R.layout.fragment_crime_list, container,false);
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -49,6 +52,7 @@ public class CrimeListFragment extends Fragment {
         @NonNull
         @Override
         public CrimeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            Log.i(TAG,"TAGonCreateViewHolder");
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             return new CrimeHolder(layoutInflater, parent);
         }

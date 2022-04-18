@@ -1,13 +1,14 @@
 package com.example.criminalintent;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
-
+    private final String TAG = this.getClass().getSimpleName();
     protected abstract Fragment createFragment();
 
     @Override
@@ -15,6 +16,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
 
+        Log.i(TAG,"TAGonCreate");
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
