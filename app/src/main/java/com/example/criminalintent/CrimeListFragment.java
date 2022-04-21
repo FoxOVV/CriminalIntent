@@ -21,8 +21,12 @@ public class CrimeListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG,"TAGonCreateView");
+
+        //Используем fragment_crime_list.xml для наполнения данными
         View view = inflater.inflate(R.layout.fragment_crime_list, container,false);
+        //Нашли необходимый визуальный виджет (типо div, только специальный - androidx.recyclerview.widget.RecyclerView)
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
+        //Устанавливаем менеджер компановки - в нашем случае вертикальная линия (колонка) - LinearLayoutManager
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateUI();
