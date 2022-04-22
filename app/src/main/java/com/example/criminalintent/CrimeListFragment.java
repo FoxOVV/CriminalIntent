@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -43,22 +44,31 @@ public class CrimeListFragment extends Fragment {
 
     //Как вягледет ViewHolder -> itemView -> View (это область на экране в которую помещаются все 11 преступлений)
     //Создан чтобы удерживает объект View
-    private class CrimeHolder extends RecyclerView.ViewHolder {
+    private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView;
         private TextView mDateTextView;
         private Crime mCrime;
 
+        //Присвоил в переменные, 2 элемента TextView которые хранятся в list_item_crime
         public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_crime, parent, false));
+            itemView.setOnClickListener(this);
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
-            mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+            mDateTextView = (TextView) itemView.findViewById(R.id.crime_data);
         }
 
+        //Заполняем TextView данными из класса Crime
         public void bind(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
             mDateTextView.setText(mCrime.getDate().toString());
+        }
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getActivity(),mCrime.getTitle() + " checked!", Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 
@@ -70,8 +80,15 @@ public class CrimeListFragment extends Fragment {
             mCrimes = crimes;
         }
 
+        @Override
+        // (1) RecyclerView вызывает его самым первым - вохвращает количество записей в массиве
+        public int getItemCount() {
+            return mCrimes.size();
+        }
+
         @NonNull
         @Override
+        // (2) RecyclerView вызывает его вторым, после getItemCount - он создает объект ViewHolder
         //Вызывается, когда ему требуется новое представление для отображения элемента
         //Другими словами вызывается 11 раз - столько записей одновременно помещается на экран смартфона
         public CrimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -81,14 +98,11 @@ public class CrimeListFragment extends Fragment {
         }
 
         @Override
+        // (3) RecyclerView вызывает его третьим, после CrimeHolder - он заполняет объект ViewHolder
+        //данными из класса Crime
         public void onBindViewHolder(CrimeHolder holder, int position) {
             Crime crime =  mCrimes.get(position);
             holder.bind(crime);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mCrimes.size();
         }
     }
 }
