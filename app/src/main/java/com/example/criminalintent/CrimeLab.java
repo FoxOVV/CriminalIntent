@@ -26,6 +26,11 @@ public class CrimeLab {
             Crime crime = new Crime();
             crime.setTitle("Crime #" + i);
             crime.setSolved(i%2==0); //Для каждого второго объекта
+            if (i%5==0) {
+                crime.setRequiresPolice(0); //Для каждого пятого объекта
+            }else {
+                crime.setRequiresPolice(1);
+            }
             mCrimes.add(crime);
         }
     }

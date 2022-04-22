@@ -50,8 +50,18 @@ public class CrimeListFragment extends Fragment {
         private Crime mCrime;
 
         //Присвоил в переменные, 2 элемента TextView которые хранятся в list_item_crime
-        public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
+        public CrimeHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
             super(inflater.inflate(R.layout.list_item_crime, parent, false));
+
+            itemView.setOnClickListener(this);
+
+            mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
+            mDateTextView = (TextView) itemView.findViewById(R.id.crime_data);
+        }
+
+        //Присвоил в переменные, 2 элемента TextView которые хранятся в list_item_crime
+        public CrimeHolder(View itemView) {
+            super(itemView);
             itemView.setOnClickListener(this);
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
@@ -93,8 +103,17 @@ public class CrimeListFragment extends Fragment {
         //Другими словами вызывается 11 раз - столько записей одновременно помещается на экран смартфона
         public CrimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             Log.i(TAG,"TAGonCreateViewHolder");
+
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            return new CrimeHolder(layoutInflater, parent);
+            View view;
+
+            if (viewType==1) {
+                view = layoutInflater.inflate(R.layout.list_item_crime, parent, false);
+            } else {
+                view = layoutInflater.inflate(R.layout.list_item_crime_police, parent, false);
+            }
+
+            return new CrimeHolder(view);
         }
 
         @Override
@@ -103,6 +122,12 @@ public class CrimeListFragment extends Fragment {
         public void onBindViewHolder(CrimeHolder holder, int position) {
             Crime crime =  mCrimes.get(position);
             holder.bind(crime);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            Crime crime =  mCrimes.get(position);
+            return crime.isRequiresPolice();
         }
     }
 }
