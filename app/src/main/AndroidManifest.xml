@@ -5,7 +5,7 @@
     <application
         android:fullBackupOnly="true"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_solved"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.CriminalIntent">
