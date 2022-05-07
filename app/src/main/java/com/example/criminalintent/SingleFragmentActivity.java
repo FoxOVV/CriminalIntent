@@ -14,7 +14,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
     protected abstract Fragment createFragment();
 
     @Override
-    //Bundle savedInstanceStat - Пакет сохраненное состояние экземпляра
+    //Bundle savedInstanceStat - Пакет сохраненного состояние экземпляра
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
