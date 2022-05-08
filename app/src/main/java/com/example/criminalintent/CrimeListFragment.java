@@ -1,5 +1,6 @@
 package com.example.criminalintent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -36,12 +37,22 @@ public class CrimeListFragment extends Fragment {
         updateUI();
         return view;
     }
+
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
     //Создает объект CrimeAdapter и назначает его RecyclerView
     private void updateUI() {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrime();
-        mAdapter = new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mAdapter);
+        if (mAdapter==null) {
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     //Как вягледет ViewHolder -> itemView -> View (это область на экране в которую помещаются все 11 преступлений)
@@ -52,6 +63,7 @@ public class CrimeListFragment extends Fragment {
         private ImageView mSolvedImageView;
         private Crime mCrime;
 
+        //Этот конструктор не используется (старая версия)
         //Присвоил в переменные, 2 элемента TextView которые хранятся в list_item_crime
         public CrimeHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
             super(inflater.inflate(R.layout.list_item_crime, parent, false));
@@ -77,15 +89,15 @@ public class CrimeListFragment extends Fragment {
         public void bind(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
-            DateFormat DF = new DateFormat();
             mDateTextView.setText( new DateFormat().format("E, d MMM yyyy HH:mm:ss", mCrime.getDate()));
             mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
         }
 
         @Override
+        //Слушатель для нажатия на строку
         public void onClick(View view) {
-            Toast.makeText(getActivity(),mCrime.getTitle() + " checked!", Toast.LENGTH_SHORT)
-                    .show();
+            Intent intent = CrimeActivity.newIntent(getActivity(),mCrime.getId());
+            startActivity(intent);
         }
     }
 
@@ -132,6 +144,8 @@ public class CrimeListFragment extends Fragment {
         }
 
         @Override
+        //Не обязательный метод, но если он определен он вызывается между 1 и 2 действием
+        //Назовем его 1.5, после getItemCount(), но до onCreateViewHolder()
         public int getItemViewType(int position) {
             Crime crime =  mCrimes.get(position);
             return crime.isRequiresPolice();
